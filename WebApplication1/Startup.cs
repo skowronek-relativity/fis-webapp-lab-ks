@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Configuration;
 
 namespace WebApplication1
 {
@@ -32,7 +33,9 @@ namespace WebApplication1
 			{
 				endpoints.MapGet("/", async context =>
 				{
-					await context.Response.WriteAsync("Hello World from CI/CD, but really!");
+					var configuration = context.RequestServices.GetService<IConfiguration>();
+					string testVariableValue = configuration.GetSection("test")?.Value ?? "test not configured!";
+					await context.Response.WriteAsync("Test variable: " + testVariableValue);
 				});
 			});
 		}
